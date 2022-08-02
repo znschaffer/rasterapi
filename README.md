@@ -14,7 +14,7 @@ Postgresql database hosted at ElephantSQL
 
 `/albums`
 
-- `GET` : Get all albums
+- `GET` : Get all albums; Accepts `count` and `start` parameters for amount of results returned and offset
 
 `/album/:id`
 
