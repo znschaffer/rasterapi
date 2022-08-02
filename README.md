@@ -1,8 +1,8 @@
 # Raster Media Example API
 
-An example RESTful API cataloging the releases of German experimental music label, [Raster Media](https://raster-media.net/).
+![](https://raster-media.net/templates/emotion_raster-noton/frontend/_resources/images/logo.png) An example RESTful API cataloging the releases of German experimental music label, [Raster Media](https://raster-media.net/).
 
-Built with Go, gorilla/mux, net/http, and postgresql.
+Built with golang ( and love ) using [mux](https://pkg.go.dev/github.com/gorilla/mux?utm_source=godoc), [http](https://pkg.go.dev/net/http), and [postgresql](https://www.postgresql.org/).
 
 ## Hosting
 
