@@ -17,6 +17,7 @@ type App struct {
 	DB     *sql.DB
 }
 
+// Sets up database connection, creates a new gorilla/mux router, and sets up routes
 func (app *App) Initialize(host, user, password, dbname string) {
 	connectionString := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", host, user, password, dbname)
 
@@ -31,6 +32,7 @@ func (app *App) Initialize(host, user, password, dbname string) {
 	app.initializeRoutes()
 }
 
+// Link all handlers to paths
 func (app *App) initializeRoutes() {
 	app.Router.HandleFunc("/albums", app.getAlbums).Methods("GET")
 	app.Router.HandleFunc("/album", app.createAlbum).Methods("POST")
@@ -43,10 +45,12 @@ func (app *App) Run(addr string) {
 	log.Fatal(http.ListenAndServe(addr, app.Router))
 }
 
+// Write JSON with Error to w ResponseWriter
 func respondWithError(w http.ResponseWriter, code int, message string) {
 	respondWithJSON(w, code, map[string]string{"error": message})
 }
 
+// Write JSON to w ResponseWriter
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 
@@ -55,6 +59,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 
+// Handler for getting Albums
 func (app *App) getAlbum(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
@@ -78,6 +83,7 @@ func (app *App) getAlbum(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, a)
 }
 
+// Handler for getting a single Album by ID
 func (app *App) getAlbums(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
@@ -98,6 +104,7 @@ func (app *App) getAlbums(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, albums)
 }
 
+// Handler for creating an Album
 func (app *App) createAlbum(w http.ResponseWriter, r *http.Request) {
 	var a album
 	decoder := json.NewDecoder(r.Body)
@@ -115,6 +122,7 @@ func (app *App) createAlbum(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, a)
 }
 
+// Handler for updating an Album by ID
 func (app *App) updateAlbum(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
@@ -140,6 +148,7 @@ func (app *App) updateAlbum(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, a)
 }
 
+// Handler for deleting an Album by ID
 func (app *App) deleteAlbum(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
